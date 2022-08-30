@@ -9,7 +9,6 @@
 #include <xentara/data/ReadHandle.hpp>
 #include <xentara/memory/WriteSentinel.hpp>
 #include <xentara/model/Attribute.hpp>
-#include <xentara/utils/io/FileInputStream.hpp>
 #include <xentara/utils/json/decoder/Object.hpp>
 #include <xentara/utils/json/decoder/Errors.hpp>
 
@@ -49,7 +48,7 @@ auto TemplateInput::loadConfig(const ConfigIntializer &initializer,
 
 			// TODO: set the appropriate member variables, and update configAttributes accordingly (if necessary) 
 		}
-		// TODO: use a more descriptive keword, e.g. "poll"
+		// TODO: use a more descriptive keyword, e.g. "poll"
 		else if (name == u8"ioBatch"sv)
 		{
 			resolver.submit<TemplateIoBatch>(value, [this](std::reference_wrapper<TemplateIoBatch> ioBatch)
@@ -73,10 +72,11 @@ auto TemplateInput::loadConfig(const ConfigIntializer &initializer,
 		// TODO: use an error message that tells the user exactly what is wrong
 		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("TODO is wrong with template input"));
 	}
+	// Make sure that an I/O batch was specified
 	if (!ioBatchLoaded)
 	{
 		// TODO: replace "I/O batch" and "template input" with more descriptive names
-		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("Missing I/O batch in template input"));
+		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("missing I/O batch in template input"));
 	}
 }
 
@@ -96,7 +96,7 @@ auto TemplateInput::resolveAttribute(std::u16string_view name) -> const model::A
 	// set already.
 	if (!_ioBatch)
 	{
-		throw std::logic_error("Internal error: xentara::plugins::templateDriver::TemplateInput::resolveAttribute() called before cross references have been resolved");
+		throw std::logic_error("internal error: xentara::plugins::templateDriver::TemplateInput::resolveAttribute() called before cross references have been resolved");
 	}
 
 	// Check all the attributes we support directly
@@ -107,7 +107,7 @@ auto TemplateInput::resolveAttribute(std::u16string_view name) -> const model::A
 		return attribute;
 	}
 
-	// Check the read state attributes
+	// Check the state attributes
 	if (auto attribute = _state.resolveAttribute(name))
 	{
 		return attribute;
@@ -127,7 +127,7 @@ auto TemplateInput::resolveEvent(std::u16string_view name) -> std::shared_ptr<pr
 	// set already.
 	if (!_ioBatch)
 	{
-		throw std::logic_error("Internal error: xentara::plugins::templateDriver::TemplateInput::resolveEvent() called before cross references have been resolved");
+		throw std::logic_error("internal error: xentara::plugins::templateDriver::TemplateInput::resolveEvent() called before cross references have been resolved");
 	}
 
 	// TODO: add any events this class supports directly
@@ -164,7 +164,7 @@ auto TemplateInput::readHandle(const model::Attribute &attribute) const noexcept
 		return _state.valueReadHandle(dataBlock);
 	}
 	
-	// Check the read state attributes
+	// Check the state attributes
 	if (auto handle = _state.readHandle(dataBlock, attribute))
 	{
 		return *handle;
