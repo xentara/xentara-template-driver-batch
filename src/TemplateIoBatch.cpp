@@ -19,7 +19,7 @@
 
 namespace xentara::plugins::templateDriver
 {
-	
+
 using namespace std::literals;
 
 TemplateIoBatch::Class TemplateIoBatch::Class::_instance;
@@ -56,20 +56,20 @@ auto TemplateIoBatch::loadConfig(const ConfigIntializer &initializer,
 	bool ioBatchLoaded = false;
 	for (auto && [name, value] : jsonObject)
     {
-		// TODO: load configuration parameters
+		/// @todo load configuration parameters
 		if (name == u8"TODO"sv)
 		{
-			// TODO: parse the value correctly
+			/// @todo parse the value correctly
 			auto todo = value.asNumber<std::uint64_t>();
 
-			// TODO: check that the value is valid
+			/// @todo check that the value is valid
 			if (!"TODO")
 			{
-				// TODO: use an error message that tells the user exactly what is wrong
+				/// @todo use an error message that tells the user exactly what is wrong
 				utils::json::decoder::throwWithLocation(value, std::runtime_error("TODO is wrong with TODO parameter of template I/O batch"));
 			}
 
-			// TODO: set the appropriate member variables, and update configAttributes accordingly (if necessary) 
+			/// @todo set the appropriate member variables, and update configAttributes accordingly (if necessary) 
 		}
 		else
 		{
@@ -79,10 +79,10 @@ auto TemplateIoBatch::loadConfig(const ConfigIntializer &initializer,
 		}
     }
 
-	// TODO: perform consistency and completeness checks
+	/// @todo perform consistency and completeness checks
 	if (!"TODO")
 	{
-		// TODO: use an error message that tells the user exactly what is wrong
+		/// @todo use an error message that tells the user exactly what is wrong
 		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("TODO is wrong with template I/O batch"));
 	}
 }
@@ -92,7 +92,7 @@ auto TemplateIoBatch::addInput(std::reference_wrapper<AbstractInput> input) -> v
 	// Make sure we belong to the same I/O component
 	if (&input.get().ioComponent() != &_ioComponent.get())
 	{
-		// TODO: replace "template I/O point", "I/O batch", and "I/O component" with more descriptive names
+		/// @todo replace "template I/O point", "I/O batch", and "I/O component" with more descriptive names
 		throw std::runtime_error("Attempt to attach template I/O point to I/O batch of different I/O component");
 	}
 
@@ -105,7 +105,7 @@ auto TemplateIoBatch::addOutput(std::reference_wrapper<AbstractOutput> output) -
 	// Make sure we belong to the same I/O component
 	if (&output.get().ioComponent() != &_ioComponent.get())
 	{
-		// TODO: replace "template I/O point", "I/O batch", and "I/O component" with more descriptive names
+		/// @todo replace "template I/O point", "I/O batch", and "I/O component" with more descriptive names
 		throw std::runtime_error("Attempt to attach template I/O point to I/O batch of different I/O component");
 	}
 
@@ -115,7 +115,7 @@ auto TemplateIoBatch::addOutput(std::reference_wrapper<AbstractOutput> output) -
 
 auto TemplateIoBatch::resolveAttribute(std::u16string_view name) -> const model::Attribute *
 {
-	// TODO: add any attributes this class supports directly, including attributes inherited from the I/O component
+	/// @todo add any attributes this class supports directly, including attributes inherited from the I/O component
 
 	// Check the read state attributes
 	if (auto attribute = _readState.resolveAttribute(name))
@@ -133,7 +133,7 @@ auto TemplateIoBatch::resolveAttribute(std::u16string_view name) -> const model:
 
 auto TemplateIoBatch::resolveEvent(std::u16string_view name) -> std::shared_ptr<process::Event>
 {
-	// TODO: add any events this class supports directly
+	/// @todo add any events this class supports directly
 
 	// Check the read state events
 	if (auto event = _readState.resolveEvent(name, sharedFromThis()))
@@ -162,7 +162,7 @@ auto TemplateIoBatch::readHandle(const model::Attribute &attribute) const noexce
 		return *handle;
 	}
 
-	// TODO: add any additional attributes inherited from the I/O component and the I/O batch
+	/// @todo add any additional attributes inherited from the I/O component and the I/O batch
 
 	return data::ReadHandle::Error::Unknown;
 }
@@ -177,7 +177,7 @@ auto TemplateIoBatch::resolveReadStateEvent(std::u16string_view name) -> std::sh
 	return _readState.resolveEvent(name, sharedFromThis());
 }
 
-auto TemplateIoBatch::inputStateReadHandle(const model::Attribute &attribute) const noexcept
+auto TemplateIoBatch::readStateReadHandle(const model::Attribute &attribute) const noexcept
 	-> std::optional<data::ReadHandle>
 {
 	return _readState.readHandle(_readDataBlock, attribute);
@@ -212,10 +212,10 @@ auto TemplateIoBatch::realize() -> void
 auto TemplateIoBatch::prepare() -> void
 {
 	// Create a read command
-	// TODO: initialized the read command properly based on the inputs to read.
+	/// @todo initialized the read command properly based on the inputs to read.
 	_readCommand.reset(new ReadCommand);
 
-	// TODO: provide the information needed to decode the value to the inputs, like e.g. the correct data data offsets.
+	/// @todo provide the information needed to decode the value to the inputs, like e.g. the correct data data offsets.
 }
 
 auto TemplateIoBatch::performReadTask(const process::ExecutionContext &context) -> void
@@ -227,10 +227,10 @@ auto TemplateIoBatch::read(std::chrono::system_clock::time_point timeStamp) -> v
 {
 	try
 	{
-		// TODO: send the read command
+		/// @todo send the read command
 		ReadCommand::Payload payload = {};
 
-		// TODO: if the read function does not throw errors, but uses return types or internal handle state,
+		/// @todo if the read function does not throw errors, but uses return types or internal handle state,
 		// throw an std::system_error here on failure, or call updateInputs() directly.
 
 		// The read was successful
@@ -276,9 +276,9 @@ auto TemplateIoBatch::write(std::chrono::system_clock::time_point timeStamp) -> 
 
 	try
 	{
-		// TODO: send the command
+		/// @todo send the command
 
-		// TODO: if the write function does not throw errors, but uses return types or internal handle state,
+		/// @todo if the write function does not throw errors, but uses return types or internal handle state,
 		// throw an std::system_error here on failure, or call updateOutputs() directly.
 
 		// The write was successful
@@ -308,7 +308,7 @@ auto TemplateIoBatch::updateInputs(std::chrono::system_clock::time_point timeSta
 	// Make a write sentinel
 	memory::WriteSentinel sentinel { _readDataBlock };
 
-	// Update the common state
+	// Update the common read state
 	const auto commonChanges = _readState.update(sentinel, timeStamp, payloadOrError.error(), _runtimeBuffers._eventsToFire);
 
 	// Update all the inputs

@@ -33,22 +33,22 @@ auto TemplateInput::loadConfig(const ConfigIntializer &initializer,
 	bool ioBatchLoaded = false;
 	for (auto && [name, value] : jsonObject)
     {
-		// TODO: custom configuration parameters
+		/// @todo load custom configuration parameters
 		if (name == u8"TODO"sv)
 		{
-			// TODO: parse the value correctly
+			/// @todo parse the value correctly
 			auto todo = value.asNumber<std::uint64_t>();
 
-			// TODO: check that the value is valid
+			/// @todo check that the value is valid
 			if (!"TODO")
 			{
-				// TODO: use an error message that tells the user exactly what is wrong
+				/// @todo use an error message that tells the user exactly what is wrong
 				utils::json::decoder::throwWithLocation(value, std::runtime_error("TODO is wrong with TODO parameter of template input"));
 			}
 
-			// TODO: set the appropriate member variables, and update configAttributes accordingly (if necessary) 
+			/// @todo set the appropriate member variables, and update configAttributes accordingly (if necessary) 
 		}
-		// TODO: use a more descriptive keyword, e.g. "poll"
+		/// @todo use a more descriptive keyword, e.g. "poll"
 		else if (name == u8"ioBatch"sv)
 		{
 			resolver.submit<TemplateIoBatch>(value, [this](std::reference_wrapper<TemplateIoBatch> ioBatch)
@@ -66,16 +66,16 @@ auto TemplateInput::loadConfig(const ConfigIntializer &initializer,
 		}
     }
 
-	// TODO: perform consistency and completeness checks
+	/// @todo perform consistency and completeness checks
 	if (!"TODO")
 	{
-		// TODO: use an error message that tells the user exactly what is wrong
+		/// @todo use an error message that tells the user exactly what is wrong
 		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("TODO is wrong with template input"));
 	}
 	// Make sure that an I/O batch was specified
 	if (!ioBatchLoaded)
 	{
-		// TODO: replace "I/O batch" and "template input" with more descriptive names
+		/// @todo replace "I/O batch" and "template input" with more descriptive names
 		utils::json::decoder::throwWithLocation(jsonObject, std::runtime_error("missing I/O batch in template input"));
 	}
 }
@@ -100,7 +100,7 @@ auto TemplateInput::resolveAttribute(std::u16string_view name) -> const model::A
 	}
 
 	// Check all the attributes we support directly
-	// TODO: add any additional attributes this class supports, including attributes inherited from the I/O component and the I/O batch
+	/// @todo add any additional attributes this class supports, including attributes inherited from the I/O component and the I/O batch
 	if (auto attribute = model::Attribute::resolve(name,
 		kValueAttribute))
 	{
@@ -130,9 +130,9 @@ auto TemplateInput::resolveEvent(std::u16string_view name) -> std::shared_ptr<pr
 		throw std::logic_error("internal error: xentara::plugins::templateDriver::TemplateInput::resolveEvent() called before cross references have been resolved");
 	}
 
-	// TODO: add any events this class supports directly
+	/// @todo add any events this class supports directly
 
-	// Check the read state events
+	// Check the state events
 	if (auto event = _state.resolveEvent(name, sharedFromThis()))
 	{
 		return event;
@@ -158,7 +158,7 @@ auto TemplateInput::readHandle(const model::Attribute &attribute) const noexcept
 	// Get the data block
 	const auto &dataBlock = _ioBatch->readDataBlock();
 	
-	// TODO: add any additional attributes this class supports
+	/// @todo add any additional attributes this class supports
 	if (attribute == kValueAttribute)
 	{
 		return _state.valueReadHandle(dataBlock);
@@ -170,12 +170,12 @@ auto TemplateInput::readHandle(const model::Attribute &attribute) const noexcept
 		return *handle;
 	}
 	// Also check the common read state attributes from the I/O batch
-	if (auto handle = _ioBatch->inputStateReadHandle(attribute))
+	if (auto handle = _ioBatch->readStateReadHandle(attribute))
 	{
 		return *handle;
 	}
 
-	// TODO: add any additional attributes inherited from the I/O component and the I/O batch
+	/// @todo add any additional attributes inherited from the I/O component and the I/O batch
 
 	return data::ReadHandle::Error::Unknown;
 }
@@ -188,23 +188,23 @@ auto TemplateInput::attachInput(memory::Array &dataArray, std::size_t &eventCoun
 auto TemplateInput::updateReadState(WriteSentinel &writeSentinel,
 	std::chrono::system_clock::time_point timeStamp,
 	const utils::eh::Failable<std::reference_wrapper<const ReadCommand::Payload>> &payloadOrError,
-	const CommonReadState::Changes &batchChanges,
+	const CommonReadState::Changes &commonChanges,
 	PendingEventList &eventsToFire) -> void
 {
 	// Check if we have a valid payload
 	if (const auto payload = payloadOrError.value())
 	{
-		// TODO: decode the value from the payload data
+		/// @todo decode the value from the payload data
 		double value = {};
 
 		// Update the state
-		_state.update(writeSentinel, timeStamp, value, batchChanges, eventsToFire);
+		_state.update(writeSentinel, timeStamp, value, commonChanges, eventsToFire);
 	}
 	// We have an error
 	else
 	{
 		// Update the state with the error
-		_state.update(writeSentinel, timeStamp, payloadOrError.error(), batchChanges, eventsToFire);
+		_state.update(writeSentinel, timeStamp, payloadOrError.error(), commonChanges, eventsToFire);
 	}
 }
 

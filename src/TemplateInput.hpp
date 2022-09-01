@@ -11,7 +11,6 @@
 #include <functional>
 #include <string_view>
 
-// TODO: rename namespace
 namespace xentara::plugins::templateDriver
 {
 
@@ -20,63 +19,71 @@ using namespace std::literals;
 class TemplateIoComponent;
 class TemplateIoBatch;
 
-// A class representing a specific type of input.
-// TODO: rename this class to something more descriptive
+/// @brief A class representing a specific type of input.
+/// @todo rename this class to something more descriptive
 class TemplateInput final : public io::Io, public AbstractInput, public plugin::EnableSharedFromThis<TemplateInput>
 {
 private:
-	// A structure used to store the class specific attributes within an element's configuration
+	/// @brief A structure used to store the class specific attributes within an element's configuration
 	struct Config final
 	{
-		// TODO: Add custom config attributes
+		/// @todo Add custom config attributes
 	};
 	
 public:
-	// The class object containing meta-information about this element type
+	/// @brief The class object containing meta-information about this element type
 	class Class final : public io::IoClass
 	{
 	public:
-		// Gets the global object
+		/// @brief Gets the global object
 		static auto instance() -> Class&
 		{
 			return _instance;
 		}
 
-	    // Returns the array handle for the class specific attributes within an element's configuration
+	    /// @brief Returns the array handle for the class specific attributes within an element's configuration
 	    auto configHandle() const -> const auto &
         {
             return _configHandle;
         }
 
+		/// @name Virtual Overrides for io::IoClass
+		/// @{
+
 		auto name() const -> std::u16string_view final
 		{
-			// TODO: change class name
+			/// @todo change class name
 			return u"TemplateInput"sv;
 		}
 	
 		auto uuid() const -> utils::core::Uuid final
 		{
-			// TODO: assign a unique UUID
+			/// @todo assign a unique UUID
 			return "cccccccc-cccc-cccc-cccc-cccccccccccc"_uuid;
 		}
 
+		/// @}
+
 	private:
-	    // The array handle for the class specific attributes within an element's configuration
+	    /// @brief The array handle for the class specific attributes within an element's configuration
 		memory::Array::ObjectHandle<Config> _configHandle { config().appendObject<Config>() };
 
-		// The global object that represents the class
+		/// @brief The global object that represents the class
 		static Class _instance;
 	};
 
-	// This constructor attaches the input to its I/O component
+	/// @brief This constructor attaches the input to its I/O component
 	TemplateInput(std::reference_wrapper<TemplateIoComponent> ioComponent) :
 		_ioComponent(ioComponent)
 	{
 	}
-	
-	auto dataType() const -> const data::DataType &;
 
-	auto directions() const -> io::Directions;
+	/// @name Virtual Overrides for io::Io
+	/// @{
+	
+	auto dataType() const -> const data::DataType & final;
+
+	auto directions() const -> io::Directions final;
 
 	auto resolveAttribute(std::u16string_view name) -> const model::Attribute * final;
 
@@ -84,42 +91,55 @@ public:
 
 	auto readHandle(const model::Attribute &attribute) const noexcept -> data::ReadHandle final;
 
-	auto attachInput(memory::Array &dataArray, std::size_t &eventCount) -> void final;
+	/// @}
+
+	/// @name Virtual Overrides for AbstractInput
+	/// @{
 
 	auto ioComponent() const -> const TemplateIoComponent & final
 	{
 		return _ioComponent;
 	}
+	
+	auto attachInput(memory::Array &dataArray, std::size_t &eventCount) -> void final;
 
 	auto updateReadState(WriteSentinel &writeSentinel,
 		std::chrono::system_clock::time_point timeStamp,
 		const utils::eh::Failable<std::reference_wrapper<const ReadCommand::Payload>> &payloadOrError,
-		const CommonReadState::Changes &batchChanges,
+		const CommonReadState::Changes &commonChanges,
 		PendingEventList &eventsToFire) -> void final;
+		
+	/// @}
 
-	// A Xentara attribute containing the current value. This is a member of this class rather than
-	// of the attributes namespace, because the access flags and type may differ from class to class
+	/// @brief A Xentara attribute containing the current value.
+	/// @note This is a member of this class rather than of the attributes namespace, because the access flags
+	/// and type may differ from class to class
 	static const model::Attribute kValueAttribute;
 
 protected:
+	/// @name Virtual Overrides for io::Io
+	/// @{
+
 	auto loadConfig(const ConfigIntializer &initializer,
 		utils::json::decoder::Object &jsonObject,
 		config::Resolver &resolver,
 		const FallbackConfigHandler &fallbackHandler) -> void final;
+		
+	/// @}
 
 private:
-	// The I/O component this input belongs to
-	// TODO: give this a more descriptive name, e.g. "_device"
+	/// @brief The I/O component this input belongs to
+	/// @todo give this a more descriptive name, e.g. "_device"
 	std::reference_wrapper<TemplateIoComponent> _ioComponent;
 
-	// The I/O batch this input belongs to, or nullptr if it hasn't been loaded yet.
-	// TODO: give this a more descriptive name, e.g. "_poll"
+	/// @brief The I/O batch this input belongs to, or nullptr if it hasn't been loaded yet.
+	/// @todo give this a more descriptive name, e.g. "_poll"
 	TemplateIoBatch *_ioBatch { nullptr };
 
-	// TODO: add information needed to decode the value from the payload of a read command, like e.g. a data offset.
+	/// @todo add information needed to decode the value from the payload of a read command, like e.g. a data offset.
 
-	// The state
-	// TODO: use the correct value type
+	/// @brief The state
+	/// @todo use the correct value type
 	PerValueReadState<double> _state;
 };
 

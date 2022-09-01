@@ -3,12 +3,11 @@
 
 #include <xentara/utils/tools/Unique.hpp>
 
-// TODO: rename namespace
 namespace xentara::plugins::templateDriver
 {
 
-// A command used to write outputs
-// TODO: implement a proper write command
+/// @brief A command used to write outputs
+/// @todo implement a proper write command
 class WriteCommand final : private utils::tools::Unique
 {
 };

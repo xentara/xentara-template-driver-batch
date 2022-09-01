@@ -67,7 +67,7 @@ auto PerValueReadState<DataType>::update(
 	WriteSentinel &writeSentinel,
 	std::chrono::system_clock::time_point timeStamp,
 	const utils::eh::Failable<DataType> &valueOrError,
-	const CommonReadState::Changes &batchChanges,
+	const CommonReadState::Changes &commonChanges,
 	PendingEventList &eventsToFire) -> void
 {
 	// Get the correct array entry
@@ -79,7 +79,7 @@ auto PerValueReadState<DataType>::update(
 
 	// Detect changes
 	const auto valueChanged = state._value != oldState._value;
-	const auto changed = valueChanged || batchChanges;
+	const auto changed = valueChanged || commonChanges;
 
 	// Update the change time, if necessary. We always need to write the change time, even if it is the same as before,
 	// because the memory resource might use swap-in.
@@ -96,7 +96,8 @@ auto PerValueReadState<DataType>::update(
 	}
 }
 
-// TODO: add template instantiations for other supported types
+/// @class xentara::plugins::templateDriver::PerValueReadState
+/// @todo add template instantiations for other supported types
 template class PerValueReadState<double>;
 
 } // namespace xentara::plugins::templateDriver

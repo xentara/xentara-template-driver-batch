@@ -8,7 +8,6 @@
 #include <xentara/process/Event.hpp>
 #include <xentara/utils/core/FixedVector.hpp>
 
-// TODO: rename namespace
 namespace xentara::plugins::templateDriver
 {
 
