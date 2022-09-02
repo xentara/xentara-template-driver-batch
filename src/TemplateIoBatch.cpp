@@ -236,7 +236,7 @@ auto TemplateIoBatch::read(std::chrono::system_clock::time_point timeStamp) -> v
 		// The read was successful
 		updateInputs(timeStamp, payload);
 	}
-	catch (const std::exception &exception)
+	catch (const std::exception &)
 	{
 		// Get the error from the current exception using this special utility function
 		const auto error = utils::eh::currentErrorCode();
@@ -284,7 +284,7 @@ auto TemplateIoBatch::write(std::chrono::system_clock::time_point timeStamp) -> 
 		// The write was successful
 		updateOutputs(timeStamp, std::error_code(), _runtimeBuffers._outputsToNotify);
 	}
-	catch (const std::exception &exception)
+	catch (const std::exception &)
 	{
 		// Get the error from the current exception using this special utility function
 		const auto error = utils::eh::currentErrorCode();
