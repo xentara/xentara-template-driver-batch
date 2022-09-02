@@ -28,19 +28,20 @@ template <typename Buffer>
 class TemplateIoBatch::RuntimeBufferSentinel final
 {
 public:
-	// The constructor clears the buffer of any garbage data that may still be in there
+	/// @brief The constructor clears the buffer of any garbage data that may still be in there
 	RuntimeBufferSentinel(Buffer &buffer) : _buffer(buffer)
 	{
 		_buffer.clear();
 	}
 
-	// The destructor clears the buffer again
+	/// @brief The destructor clears the buffer again
 	~RuntimeBufferSentinel()
 	{
 		_buffer.clear();
 	}
+
 private:
-	// The buffer to protect
+	/// @brief The buffer to protect
 	Buffer &_buffer;
 };
 
