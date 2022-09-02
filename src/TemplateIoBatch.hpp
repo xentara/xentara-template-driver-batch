@@ -191,6 +191,7 @@ private:
 	/// @brief Updates the outputs and sends events
 	/// @param timeStamp The update time stamp
 	/// @param error The error code, or a default constructed std::error_code object if no error occurred
+	/// @param outputs The outputs to update
 	auto updateOutputs(
 		std::chrono::system_clock::time_point timeStamp, std::error_code error, const OutputList &outputs) -> void;
 
