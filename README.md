@@ -67,7 +67,7 @@ The template code has the following features:
   centrally in the I/O batch. These attributes are then inherited by the I/O points, so that they can be accessed as attributes of the I/O point as well.
 - The I/O batch publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *read*,
   which acquires the current values of all I/O points from the I/O component using a read command.
-- The I/O batch publishe a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal changes
+- The I/O batch publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal changes
   to the [quality](https://docs.xentara.io/xentara/xentara_io_points.html#xentara_io_points_quality). This event
   is inherited by the I/O points, so that it can be accessed through the I/O points as well.
 - The I/O batch publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *write*,
