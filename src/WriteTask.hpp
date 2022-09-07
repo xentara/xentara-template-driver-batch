@@ -45,7 +45,7 @@ template <typename Target>
 auto WriteTask<Target>::preparePreOperational(const process::ExecutionContext &context) -> Status
 {
 	// We don't actually need to do anything, so just tell the scheduler that it can proceed to the next
-	// stage as far as we're concered
+	// stage as far as we're concerned
 	return Status::Ready;
 }
 
@@ -61,7 +61,6 @@ auto WriteTask<Target>::preOperational(const process::ExecutionContext &context)
 template <typename Target>
 auto WriteTask<Target>::operational(const process::ExecutionContext &context) -> void
 {
-	// read the value
 	_target.get().performWriteTask(context);
 }
 
