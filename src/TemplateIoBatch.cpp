@@ -262,7 +262,7 @@ auto TemplateIoBatch::read(std::chrono::system_clock::time_point timeStamp) -> v
 		// Get the error from the current exception using this special utility function
 		const auto error = utils::eh::currentErrorCode();
 		// Update the state
-		updateInputs(timeStamp, error);
+		updateInputs(timeStamp, utils::eh::unexpected(error));
 	}
 }
 
@@ -317,10 +317,10 @@ auto TemplateIoBatch::write(std::chrono::system_clock::time_point timeStamp) -> 
 auto TemplateIoBatch::invalidateData(std::chrono::system_clock::time_point timeStamp) -> void
 {
 	// Set the state to "No Data"
-	updateInputs(timeStamp, make_error_code(CustomError::NoData));
+	updateInputs(timeStamp, utils::eh::unexpected(CustomError::NoData));
 }
 
-auto TemplateIoBatch::updateInputs(std::chrono::system_clock::time_point timeStamp, const utils::eh::Failable<std::reference_wrapper<const ReadCommand::Payload>> &payloadOrError)
+auto TemplateIoBatch::updateInputs(std::chrono::system_clock::time_point timeStamp, const utils::eh::expected<std::reference_wrapper<const ReadCommand::Payload>, std::error_code> &payloadOrError)
 	-> void
 {
 	// Protect use of the pending event buffer
