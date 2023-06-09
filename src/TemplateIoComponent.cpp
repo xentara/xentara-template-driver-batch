@@ -2,13 +2,15 @@
 #include "TemplateIoComponent.hpp"
 
 #include "Attributes.hpp"
-#include "TemplateIoBatch.hpp"
+#include "TemplateBatchTransaction.hpp"
 #include "TemplateInput.hpp"
 #include "TemplateOutput.hpp"
 
+#include <xentara/config/FallbackHandler.hpp>
 #include <xentara/data/ReadHandle.hpp>
 #include <xentara/model/Attribute.hpp>
-#include <xentara/plugin/SharedFactory.hpp>
+#include <xentara/model/ForEachAttributeFunction.hpp>
+#include <xentara/skill/ElementFactory.hpp>
 #include <xentara/utils/json/decoder/Object.hpp>
 #include <xentara/utils/json/decoder/Errors.hpp>
 
@@ -24,7 +26,7 @@ TemplateIoComponent::Class TemplateIoComponent::Class::_instance;
 auto TemplateIoComponent::loadConfig(const ConfigIntializer &initializer,
 		utils::json::decoder::Object &jsonObject,
 		config::Resolver &resolver,
-		const FallbackConfigHandler &fallbackHandler) -> void
+		const config::FallbackHandler &fallbackHandler) -> void
 {
 	// Get a reference that allows us to modify our own config attributes
     auto &&configAttributes = initializer[Class::instance().configHandle()];
@@ -63,49 +65,40 @@ auto TemplateIoComponent::loadConfig(const ConfigIntializer &initializer,
 	}
 }
 
-auto TemplateIoComponent::createIo(const io::IoClass &ioClass, plugin::SharedFactory<io::Io> &factory)
-	-> std::shared_ptr<io::Io>
+auto TemplateIoComponent::createChildElement(const skill::Element::Class &elementClass, skill::ElementFactory &factory)
+	-> std::shared_ptr<skill::Element>
 {
-	if (&ioClass == &TemplateInput::Class::instance())
+	if (&elementClass == &TemplateInput::Class::instance())
 	{
 		return factory.makeShared<TemplateInput>(*this);
 	}
-	else if (&ioClass == &TemplateOutput::Class::instance())
+	else if (&elementClass == &TemplateOutput::Class::instance())
 	{
 		return factory.makeShared<TemplateOutput>(*this);
 	}
-
-	/// @todo add any other supported I/O point types
-
-	return nullptr;
-}
-
-auto TemplateIoComponent::createIoBatch(const io::IoBatchClass &ioClass, plugin::SharedFactory<io::IoBatch> &factory)
-	-> std::shared_ptr<io::IoBatch>
-{
-	if (&ioClass == &TemplateIoBatch::Class::instance())
+	else if (&elementClass == &TemplateBatchTransaction::Class::instance())
 	{
-		return factory.makeShared<TemplateIoBatch>(*this);
+		return factory.makeShared<TemplateBatchTransaction>(*this);
 	}
 
-	/// @todo add any other supported I/O batch types
+	/// @todo add any other supported child element types
 
 	return nullptr;
 }
 
-auto TemplateIoComponent::resolveAttribute(std::string_view name) -> const model::Attribute *
+auto TemplateIoComponent::forEachAttribute(const model::ForEachAttributeFunction &function) const -> bool
 {
-	/// @todo resolve any attributes this class supports using model::Attribute::resolve
+	/// @todo call *function* with all attributes this class supports
 
-	return nullptr;
+	return false;
 }
 
-auto TemplateIoComponent::readHandle(const model::Attribute &attribute) const noexcept -> data::ReadHandle
+auto TemplateIoComponent::makeReadHandle(const model::Attribute &attribute) const noexcept -> std::optional<data::ReadHandle>
 {
 	/// @todo create read handles for any readable attributes this class supports
 
 	// Nothing found
-	return data::ReadHandle::Error::Unknown;
+	return std::nullopt;
 }
 
 auto TemplateIoComponent::prepare() -> void
