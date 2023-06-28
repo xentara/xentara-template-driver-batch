@@ -67,9 +67,6 @@ The template code has the following features:
   centrally in the batch transaction. These attributes are then inherited by the data points, so that they can be accessed as attributes of the data point as well.
 - The batch transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *read*,
   which acquires the current values of all data points from the I/O component using a read command.
-- The batch transaction publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal changes
-  to the [quality](https://docs.xentara.io/xentara/xentara_quality.html). This event
-  is inherited by the data points, so that it can be accessed through the data points as well.
 - The batch transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *write*,
   that checks which outputs have pending output values, and writes those outputs to the I/O component using a write command (if there are any).
 - The batch transaction publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
@@ -92,9 +89,6 @@ The template code has the following features:
 - The input inherits [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
   for update time, [quality](https://docs.xentara.io/xentara/xentara_quality.html) and error code from the
   batch transaction, and shares them with all other data points belonging to the same batch transaction.
-- The input publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal changes
-  to the value and [quality](https://docs.xentara.io/xentara/xentara_quality.html). The event to signal
-  a change in quality is inherited from the batch transaction, and shared with all other data points belonging to the same batch transaction.
 
 ### Output Template
 
@@ -112,8 +106,5 @@ The template code has the following features:
 - The output inherits [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
   for update time, [quality](https://docs.xentara.io/xentara/xentara_quality.html) and error code from the
   batch transaction, and shares them with all other data points belonging to the same batch transaction.
-- The output publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal changes
-  to the value and [quality](https://docs.xentara.io/xentara/xentara_quality.html). The event to signal
-  a change in quality is inherited from the batch transaction, and shared with all other data points belonging to the same batch transaction.
 - The output publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
   a new value was written, or if a write error occurred.
