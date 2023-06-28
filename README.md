@@ -71,7 +71,7 @@ The template code has the following features:
   that checks which outputs have pending output values, and writes those outputs to the I/O component using a write command (if there are any).
 - The batch transaction publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
   a write command was sent, or if a write error occurred. These events are *not* inherited by the data points, who have their own individual events instead.
-  This is done so that the events of the individual outputs can be fired individually for only those outputs that were actually written.
+  This is done so that the events of the individual outputs can be raised individually for only those outputs that were actually written.
 
 ## Xentara Skill Data Point Templates
 
