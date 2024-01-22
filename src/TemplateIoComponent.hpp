@@ -4,6 +4,7 @@
 #include "Attributes.hpp"
 #include "CustomError.hpp"
 
+#include <xentara/model/ElementCategory.hpp>
 #include <xentara/skill/Element.hpp>
 #include <xentara/utils/core/Uuid.hpp>
 #include <xentara/utils/tools/Unique.hpp>
@@ -50,9 +51,10 @@ public:
 
 	auto makeReadHandle(const model::Attribute &attribute) const noexcept -> std::optional<data::ReadHandle> final;
 
-	auto prepare() -> void final;
-
-	auto cleanup() -> void final;
+	auto category() const noexcept -> model::ElementCategory final
+	{
+		return model::ElementCategory::Device;
+	}
 
 	/// @}
 
@@ -61,6 +63,10 @@ private:
 	/// @{
 
 	auto load(utils::json::decoder::Object &jsonObject, config::Context &context) -> void final;
+
+	auto prepare() -> void final;
+
+	auto cleanup() -> void final;
 
 	/// @}
 
