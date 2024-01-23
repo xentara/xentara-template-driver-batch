@@ -51,25 +51,25 @@ three types of components:
 - I/O components that are permanently attached to the computer, and cannot be removed or reattached without shutting down, or
 - virtual I/O components, that do not represent physical devices at all (simulators, A/I models, computational units etc.).
 
-## Xentara Batch Transaction Template
+## Xentara I/O Transaction Template
 
-*(See [Batch Transactions](https://docs.xentara.io/xentara/xentara_batch_transactions.html) in the [Xentara documentation](https://docs.xentara.io/xentara/))*
+*(See [I/O Transactions](https://docs.xentara.io/xentara/xentara_io_transactions.html) in the [Xentara documentation](https://docs.xentara.io/xentara/))*
 
-[src/TemplateBatchTransaction.hpp](src/TemplateBatchTransaction.hpp)  
-[src/TemplateBatchTransaction.cpp](src/TemplateBatchTransaction.cpp)
+[src/TemplateIoTransaction.hpp](src/TemplateIoTransaction.hpp)  
+[src/TemplateIoTransaction.cpp](src/TemplateIoTransaction.cpp)
 
-The batch transaction template provides template code for a batch communications request that can read and write multiple data points at the same time.
+The I/O transaction template provides template code for a batch communications request that can read and write multiple data points at the same time.
 
 The template code has the following features:
 
-- All data points attached to a batch transaction share common [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
+- All data points attached to an I/O transaction share common [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
   for update time, [quality](https://docs.xentara.io/xentara/xentara_quality.html) and error code, which are maintained
-  centrally in the batch transaction. These attributes are then inherited by the data points, so that they can be accessed as attributes of the data point as well.
-- The batch transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *read*,
+  centrally in the I/O transaction. These attributes are then inherited by the data points, so that they can be accessed as attributes of the data point as well.
+- The I/O transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *read*,
   which acquires the current values of all data points from the I/O component using a read command.
-- The batch transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *write*,
+- The I/O transaction publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *write*,
   that checks which outputs have pending output values, and writes those outputs to the I/O component using a write command (if there are any).
-- The batch transaction publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
+- The I/O transaction publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
   a write command was sent, or if a write error occurred. These events are *not* inherited by the data points, who have their own individual events instead.
   This is done so that the events of the individual outputs can be raised individually for only those outputs that were actually written.
 
@@ -82,13 +82,13 @@ The template code has the following features:
 [src/TemplateInput.hpp](src/TemplateInput.hpp)  
 [src/TemplateInput.cpp](src/TemplateInput.cpp)  
 
-The input template provides template code for a read-only skill data point whose value is read using a batch transaction.
+The input template provides template code for a read-only skill data point whose value is read using an I/O transaction.
 
 The template code has the following features:
 
 - The input inherits [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
   for update time, [quality](https://docs.xentara.io/xentara/xentara_quality.html) and error code from the
-  batch transaction, and shares them with all other data points belonging to the same batch transaction.
+  I/O transaction, and shares them with all other data points belonging to the same I/O transaction.
 
 ### Output Template
 
@@ -100,11 +100,11 @@ The output template provides template code for a read/write skill data point who
 The template code has the following features:
 
 - The input and output values are handled entirely separately. A written output value is not reflected in the input value until
-  it has been read back from the I/O component by the batch transaction. This is necessary because the I/O component might reject or
+  it has been read back from the I/O component by the I/O transaction. This is necessary because the I/O component might reject or
   modify the written value.
-- The value of the output is not sent to the I/O component directly when it is written, but placed in a queue to be written by the batch transaction.
+- The value of the output is not sent to the I/O component directly when it is written, but placed in a queue to be written by the I/O transaction.
 - The output inherits [Xentara attributes](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_attributes)
   for update time, [quality](https://docs.xentara.io/xentara/xentara_quality.html) and error code from the
-  batch transaction, and shares them with all other data points belonging to the same batch transaction.
+  I/O transaction, and shares them with all other data points belonging to the same I/O transaction.
 - The output publishes [Xentara events](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) to signal if
   a new value was written, or if a write error occurred.
