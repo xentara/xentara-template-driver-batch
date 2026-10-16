@@ -34,7 +34,6 @@ add_library(
 	"src/PerValueReadState.hpp"
 	"src/ReadCommand.hpp"
 	"src/ReadTask.hpp"
-	"src/SingleValueQueue.hpp"
 	"src/Skill.cpp"
 	"src/Skill.hpp"
 	"src/Tasks.cpp"

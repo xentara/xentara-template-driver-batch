@@ -5,10 +5,10 @@
 #include "AbstractOutput.hpp"
 #include "PerValueReadState.hpp"
 #include "WriteState.hpp"
-#include "SingleValueQueue.hpp"
 
 #include <xentara/skill/DataPoint.hpp>
 #include <xentara/skill/EnableSharedFromThis.hpp>
+#include <xentara/utils/lockFree/SingleElementBuffer.hpp>
 
 #include <functional>
 #include <string_view>
@@ -107,7 +107,7 @@ private:
 	/// @todo use the correct value type
 	auto scheduleOutputValue(double value) noexcept
 	{
-		_pendingOutputValue.enqueue(value);
+		_pendingOutputValue.push(value);
 	}
 
 	/// @name Virtual Overrides for skill::DataPoint
@@ -136,7 +136,7 @@ private:
 
 	/// @brief The queue for the pending output value
 	/// @todo use the correct value type
-	SingleValueQueue<double> _pendingOutputValue;
+	utils::lockFree::SingleElementBuffer<double> _pendingOutputValue;
 };
 
 } // namespace xentara::plugins::templateDriver
